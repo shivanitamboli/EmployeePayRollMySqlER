@@ -1,0 +1,369 @@
+MySQL Shell 8.0.27
+
+Copyright (c) 2016, 2021, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect Shivani@localhost:3306
+Creating a session to 'Shivani@localhost:3306'
+Please provide the password for 'Shivani@localhost:3306': ****
+Save password for 'Shivani@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): y
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 16
+Server version: 8.0.27 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show database
+                               -> show databases
+                               -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database
+show databases' at line 1
+ MySQL  localhost:3306 ssl  SQL > show databases
+                               -> ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.0008 sec)
+
+1.UC1
+*****************************************************************************************************************************************************************************************
+
+ MySQL  localhost:3306 ssl  SQL > create database Payroll_Service;
+Query OK, 1 row affected (0.0147 sec)
+ MySQL  localhost:3306 ssl  SQL > show databases ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.0093 sec)
+ MySQL  localhost:3306 ssl  SQL > use Payroll_Service
+Default schema set to `Payroll_Service`.
+Fetching table and column names from `payroll_service` for auto-completion... Press ^C to stop.
+
+2.UC2
+***********************************************************************************************************************************************************************************************
+
+MySQL  localhost:3306 ssl  payroll_service  SQL > create table Payroll_Service(
+                                                -> ID int unsigned not null auto_increment primary key,
+                                                -> NAME varchar(150) not null,
+                                                -> SALARY double not null,
+                                                -> START_DATE date not null);
+Query OK, 0 rows affected (0.0626 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > describe Payroll_Service
+                                                -> :
+                                                -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':' at line 2
+ MySQL  localhost:3306 ssl  payroll_service  SQL > describe Payroll_Service;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| ID         | int unsigned | NO   | PRI | NULL    | auto_increment |
+| NAME       | varchar(150) | NO   |     | NULL    |                |
+| SALARY     | double       | NO   |     | NULL    |                |
+| START_DATE | date         | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.0123 sec)
+
+3.UC3
+**************************************************************************************************************************************************************************************
+
+MySQL  localhost:3306 ssl  payroll_service  SQL > insert into Payroll_Service(NAME,SALARY,START_DATE) values
+                                                -> ("Bill",100000.00,"2018-10-03"),
+                                                -> ("Mark",200000.00,"2019-10-03"),
+                                                -> ("Charlie",300000.00,"2020-05-21");
+Query OK, 3 rows affected (0.0246 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > describe Payroll_Service;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| ID         | int unsigned | NO   | PRI | NULL    | auto_increment |
+| NAME       | varchar(150) | NO   |     | NULL    |                |
+| SALARY     | double       | NO   |     | NULL    |                |
+| START_DATE | date         | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.0150 sec)
+
+4.UC4
+*******************************************************************************************************************************************************************************
+
+MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service;
++----+---------+--------+------------+
+| ID | NAME    | SALARY | START_DATE |
++----+---------+--------+------------+
+|  1 | Bill    | 100000 | 2018-10-03 |
+|  2 | Mark    | 200000 | 2019-10-03 |
+|  3 | Charlie | 300000 | 2020-05-21 |
++----+---------+--------+------------+
+3 rows in set (0.0013 sec)
+
+5.UC5
+**************************************************************************************************************************************************************************************
+
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select SALARY from Payroll_Service where NAME = "Bill";
++--------+
+| SALARY |
++--------+
+| 100000 |
++--------+
+1 row in set (0.0008 sec)
+
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service where START_DATE between cast("2018-01-01" as date) and date (NOW());
++----+---------+--------+------------+
+| ID | NAME    | SALARY | START_DATE |
++----+---------+--------+------------+
+|  1 | Bill    | 100000 | 2018-10-03 |
+|  2 | Mark    | 200000 | 2019-10-03 |
+|  3 | Charlie | 300000 | 2020-05-21 |
++----+---------+--------+------------+
+3 rows in set (0.0009 sec)
+
+6.UC6
+**************************************************************************************************************************************************************************************
+
+MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add GENDER char not null after NAME;
+Query OK, 0 rows affected (0.1068 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service;
++----+---------+--------+--------+------------+
+| ID | NAME    | GENDER | SALARY | START_DATE |
++----+---------+--------+--------+------------+
+|  1 | Bill    |        | 100000 | 2018-10-03 |
+|  2 | Mark    |        | 200000 | 2019-10-03 |
+|  3 | Charlie |        | 300000 | 2020-05-21 |
++----+---------+--------+--------+------------+
+3 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > update Payroll_Service set GENDER = 'M' where NAME = "Bill" or NAME = "Charlie";
+Query OK, 2 rows affected (0.0127 sec)
+
+Rows matched: 2  Changed: 2  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > update Payroll_Service set GENDER = 'F' where ID =2;
+Query OK, 1 row affected (0.0177 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service;
++----+---------+--------+--------+------------+
+| ID | NAME    | GENDER | SALARY | START_DATE |
++----+---------+--------+--------+------------+
+|  1 | Bill    | M      | 100000 | 2018-10-03 |
+|  2 | Mark    | F      | 200000 | 2019-10-03 |
+|  3 | Charlie | M      | 300000 | 2020-05-21 |
++----+---------+--------+--------+------------+
+3 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > update Payroll_Service set GENDER = 'M' where ID =2;
+Query OK, 1 row affected (0.0102 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service;
++----+---------+--------+--------+------------+
+| ID | NAME    | GENDER | SALARY | START_DATE |
++----+---------+--------+--------+------------+
+|  1 | Bill    | M      | 100000 | 2018-10-03 |
+|  2 | Mark    | M      | 200000 | 2019-10-03 |
+|  3 | Charlie | M      | 300000 | 2020-05-21 |    
+
+ MySQL  localhost:3306 ssl  payroll_service  SQL > insert into Payroll_Service(NAME,GENDER,SALARY,START_);                                               insert into Payroll_Service(NAME,GENDER,SALARY,START_D);                                              insert into Payroll_Service(NAME,GENDER,SALARY,START_DA);                                             insert into Payroll_Service(NAME,GENDER,SALARY,START_DAT);                                            insert into Payroll_Service(NAME,GENDER,SALARY,START_DATE);                                           insert into Payroll_Service(NAME,GENDER,SALARY,START_DATE);                                           insert into Payroll_Service(NAME,GENDER,SALARY,START_DATE);                                           insert into Payroll_Service(NAME,GENDER,SALARY,START_DATE);                                           insert into Payroll_Service(NAME,GENDER,SALARY,START_DATE);                                           update Payroll_Service set GENDER = 'M' where ID =2;                                                  update Payroll_Service set GENDER = 'F' where ID =2;                                                  update Payroll_Service set GENDER = 'M' where NAME = "Bill" or NAME = "Charlie";                      alter table Payroll_Service add GENDER char not null after NAME;                                      select * from Payroll_Service where START_DATE between cast("2018-01-01" as date) and date (NOW());   select * from Payroll_Service where START_DATE between cast ("2018-01-01" as date) and date (NOW());  select SALARY from Payroll_Service where NAME = "Bill";                                               select * from Payroll_Service;
++----+---------+--------+--------+------------+
+| ID | NAME    | GENDER | SALARY | START_DATE |
++----+---------+--------+--------+------------+
+|  1 | Bill    | M      | 100000 | 2018-10-03 |
+|  2 | Mark    | M      | 200000 | 2019-10-03 |
+|  3 | Charlie | M      | 300000 | 2020-05-21 |
++----+---------+--------+--------+------------+
+3 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL >
+ MySQL  localhost:3306 ssl  payroll_service  SQL > insert into Payroll_Service(NAME,GENDER,SALARY,START_DATE) values
+                                                -> ("Terisa","F",400000.00,"2018-08-26");
+Query OK, 1 row affected (0.0112 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service;
++----+---------+--------+--------+------------+
+| ID | NAME    | GENDER | SALARY | START_DATE |
++----+---------+--------+--------+------------+
+|  1 | Bill    | M      | 100000 | 2018-10-03 |
+|  2 | Mark    | M      | 200000 | 2019-10-03 |
+|  3 | Charlie | M      | 300000 | 2020-05-21 |
+|  4 | Terisa  | F      | 400000 | 2018-08-26 |
++----+---------+--------+--------+------------+
+4 rows in set (0.0106 sec)
+
+7.UC7
+*************************************************************************************************************************************************************************************************8
+
+MySQL  localhost:3306 ssl  payroll_service  SQL > select sum(SALARY) from Payroll_Service where GENDER = 'M' group by GENDER;
++-------------+
+| sum(SALARY) |
++-------------+
+|      600000 |
++-------------+
+1 row in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select sum(SALARY) from Payroll_Service where GENDER = 'F' group by GENDER;
++-------------+
+| sum(SALARY) |
++-------------+
+|      400000 |
++-------------+
+1 row in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select avg(SALARY) from Payroll_Service where GENDER = 'M' group by GENDER;
++-------------+
+| avg(SALARY) |
++-------------+
+|      200000 |
++-------------+
+1 row in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select avg(SALARY) from Payroll_Service group by GENDER;
++-------------+
+| avg(SALARY) |
++-------------+
+|      200000 |
+|      400000 |
++-------------+
+2 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select GENDER,avg(SALARY) from Payroll_Service group by GENDER;
++--------+-------------+
+| GENDER | avg(SALARY) |
++--------+-------------+
+| M      |      200000 |
+| F      |      400000 |
++--------+-------------+
+2 rows in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select max(SALARY) from Payroll_Service;
++-------------+
+| max(SALARY) |
++-------------+
+|      400000 |
++-------------+
+1 row in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select min(SALARY) from Payroll_Service;
++-------------+
+| min(SALARY) |
++-------------+
+|      100000 |
++-------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select NAME,GENDER,max(SALARY) from Payroll_Service group by GENDER;
++--------+--------+-------------+
+| NAME   | GENDER | max(SALARY) |
++--------+--------+-------------+
+| Bill   | M      |      300000 |
+| Terisa | F      |      400000 |
++--------+--------+-------------+
+2 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select NAME,GENDER,min(SALARY) from Payroll_Service group by GENDER;
++--------+--------+-------------+
+| NAME   | GENDER | min(SALARY) |
++--------+--------+-------------+
+| Bill   | M      |      100000 |
+| Terisa | F      |      400000 |
++--------+--------+-------------+
+2 rows in set (0.0008 sec)
+
+
+8.UC8
+************************************************************************************************************************************************************************************************************************************
+
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add phone_number bigint after NAME;
+Query OK, 0 rows affected (0.1252 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add address varchar(250) after phone_number;
+Query OK, 0 rows affected (0.0875 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add department varchar(150) not null after address;
+Query OK, 0 rows affected (0.0826 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service alter address set default'TBD';
+Query OK, 0 rows affected (0.0305 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service;
++----+---------+--------------+---------+------------+--------+--------+------------+
+| ID | NAME    | phone_number | address | department | GENDER | SALARY | START_DATE |
++----+---------+--------------+---------+------------+--------+--------+------------+
+|  1 | Bill    |         NULL | NULL    |            | M      | 100000 | 2018-10-03 |
+|  2 | Mark    |         NULL | NULL    |            | M      | 200000 | 2019-10-03 |
+|  3 | Charlie |         NULL | NULL    |            | M      | 300000 | 2020-05-21 |
+|  4 | Terisa  |         NULL | NULL    |            | F      | 400000 | 2018-08-26 |
++----+---------+--------------+---------+------------+--------+--------+------------+
+4 rows in set (0.0099 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > describe Payroll_Service;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| ID           | int unsigned | NO   | PRI | NULL    | auto_increment |
+| NAME         | varchar(150) | NO   |     | NULL    |                |
+| phone_number | bigint       | YES  |     | NULL    |                |
+| address      | varchar(250) | YES  |     | TBD     |                |
+| department   | varchar(150) | NO   |     | NULL    |                |
+| GENDER       | char(1)      | NO   |     | NULL    |                |
+| SALARY       | double       | NO   |     | NULL    |                |
+| START_DATE   | date         | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.0181 sec)
+
+9.UC9
+************************************************************************************************************************************************************************************
+
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add basic_pay double not null after GENDER;
+Query OK, 0 rows affected (0.1675 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add deductions double not null after basic_pay;
+Query OK, 0 rows affected (0.0984 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add taxable_pay double not null after deductions;
+Query OK, 0 rows affected (0.1070 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add tax double not null after taxable_pay;
+Query OK, 0 rows affected (0.0972 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > alter table Payroll_Service add net_pay double not null after tax;
+Query OK, 0 rows affected (0.0880 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  payroll_service  SQL > describe Payroll_Service;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| ID           | int unsigned | NO   | PRI | NULL    | auto_increment |
+| NAME         | varchar(150) | NO   |     | NULL    |                |
+| phone_number | bigint       | YES  |     | NULL    |                |
+| address      | varchar(250) | YES  |     | TBD     |                |
+| department   | varchar(150) | NO   |     | NULL    |                |
+| GENDER       | char(1)      | NO   |     | NULL    |                |
+| basic_pay    | double       | NO   |     | NULL    |                |
+| deductions   | double       | NO   |     | NULL    |                |
+| taxable_pay  | double       | NO   |     | NULL    |                |
+| tax          | double       | NO   |     | NULL    |                |
+| net_pay      | double       | NO   |     | NULL    |                |
+| SALARY       | double       | NO   |     | NULL    |                |
+| START_DATE   | date         | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+13 rows in set (0.0118 sec)
+ MySQL  localhost:3306 ssl  payroll_service  SQL > select * from Payroll_Service;
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+-----+---------+--------+------------+
+| ID | NAME    | phone_number | address | department | GENDER | basic_pay | deductions | taxable_pay | tax | net_pay | SALARY | START_DATE |
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+-----+---------+--------+------------+
+|  1 | Bill    |         NULL | NULL    |            | M      |         0 |          0 |           0 |   0 |       0 | 100000 | 2018-10-03 |
+|  2 | Mark    |         NULL | NULL    |            | M      |         0 |          0 |           0 |   0 |       0 | 200000 | 2019-10-03 |
+|  3 | Charlie |         NULL | NULL    |            | M      |         0 |          0 |           0 |   0 |       0 | 300000 | 2020-05-21 |
+|  4 | Terisa  |         NULL | NULL    |            | F      |         0 |          0 |           0 |   0 |       0 | 400000 | 2018-08-26 |
++----+---------+--------------+---------+------------+--------+-----------+------------+-------------+-----+---------+--------+------------+
